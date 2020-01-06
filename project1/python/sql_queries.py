@@ -121,7 +121,8 @@ artist_table_insert = ("""
                         location, \
                         latitude, \
                         longitude)
-    VALUES (%s, %s, %s, %s, %s);
+    VALUES (%s, %s, %s, %s, %s)
+    ON CONFLICT (artist_id) DO NOTHING;
 """)
 
 
