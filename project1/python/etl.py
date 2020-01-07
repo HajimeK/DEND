@@ -18,6 +18,22 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Process song files and store them into songs and artists table in DB.
+    The files includes JSON format of songs data.
+
+    Parameters
+    ----------
+    cur : Cursor class instance (http://initd.org/psycopg/docs/cursor.html)
+        database cursor
+    filepath : string
+        full file path to entry data
+
+    Returns
+    -------
+    song_data in songs table as a row
+    artist_data in artists table as a row
+    """
     # open song file
     df = pd.read_json(filepath, lines=True, orient='columns')
 
@@ -32,6 +48,16 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+
+    """
     # open log file
     df = pd.read_json(filepath, lines=True, orient='columns')
 
@@ -94,6 +120,9 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Connect to DB to store all the input data from data/song_data and data/log_data.
+    """
     conn = psycopg2.connect(
         "host=172.17.0.2 dbname=sparkifydb user=student password=student")
 #        "host=127.0.0.1 dbname=sparkifydb user=student password=student")
