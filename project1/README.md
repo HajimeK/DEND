@@ -1,12 +1,19 @@
-The README file includes a summary of the project, how to run the Python scripts, and an explanation of the files in the repository. Comments are used effectively and each function has a docstring.
+# Udacity DEND Project 1
 
 ## Setting up PostgresSQL
 
+### Pre-requisites.
+
+You have set up docker in your local environment.
+
 ### Setup docker container for PostgresSQL
 
+Following will download the PostgreSQL docker container image, and launch the docker container.
 ```
-sudo docker run -d --name postgres -e POSTGRES_PASSWORD=DEND postgres:latest
+$ sudo docker run -d --name postgres -e POSTGRES_PASSWORD=DEND postgres:latest
 ```
+In this command, the docker container name postgres is created with the latest PostgreSQL image in the docker hub.
+
 
 Then you can find the docker containter running PostgresSQL.
 ```
@@ -15,20 +22,22 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 4cbb2fdba2aa        postgres:latest     "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp            postgres
 ```
 
-
-To stop:
+To stop the docker container,
 ```
-sudo docker stop postgres
-```
-
-```
-sudo docker start postgres
+$ sudo docker stop postgres
 ```
 
+To start the docker container,
 ```
+$ sudo docker start postgres
+```
+### Create a database user and add roles
 
-CREATE USER student WITH PASSWORD student
+In this project, the database *studentdb* need to be created to manage tables.
+Here, we are going to create the database, and default user *student*, in the PostgresSQL running as a docker container.
 
+First launch shell to operate in the docker container, and run PostgreSQL client tool, *psql*.
+```
 sudo docker exec -it postgres /bin/bash
 [sudo] hk のパスワード: 
 root@4cbb2fdba2aa:/# which psql
@@ -38,10 +47,10 @@ psql (12.1 (Debian 12.1-1.pgdg100+1))
 Type "help" for help.
 ```
 
-### Create a database user and add roles
 
-Create a new user student and assing the same roles as the default postgres user.
-In this couser user has the password "student".
+Create a new user student and assing the same roles as the default postgres user with the client tool.
+Adming roles are assigned to the user *student* in the below example.
+These will be needed when running DDL scripst.
 
 ```
 postgres=# CREATE USER student WITH PASSWORD 'student';
@@ -77,7 +86,10 @@ In this project
 - studentdb
 - saprkifydb
 
-are defined as databases.
+are defined as databases. In the PostgreSQL client tool, these are created as below.
+The database *sparkifydb* can be dropped and re-created, with the python command provided in the project.
+So creating the database *sparkifydb* is not mandatory here.
+
 ```
 postgres=# CREATE DATABASE studentdb WITH OWNER=student;
 postgres=# CREATE DATABASE sparkifydb WITH OWNER=student;
@@ -96,7 +108,9 @@ postgres=# \l
 
 ```
 
-### Client tools installation
+### Client tools installation (option)
+
+You can operate in the console without lauching the shell in the docker container by installing the client tools as below.
 
 ```
 $ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -111,7 +125,7 @@ $ sudo apt install postgresql-client-12
 
 After installed the client tool, we can access DB with the following comment.
 ```
-psql -h 172.17.0.2 -p 5432 -U postgres
+$ psql -h 172.17.0.2 -p 5432 -U postgres
 ```
 The host ip address 172.17.0.2 can be obtained by 
 
@@ -123,49 +137,48 @@ Find "NetworkSettings"->"IPAddress" in the output.
 
 ## Python environment
 
-Phthon environment is set up with anaconda 4.8.0 as below.
+In this project, python is used to load data and store them into the database.
+Here in my project, phthon environment is set up with anaconda 4.8.0 as below.
+
 ```
 $ conda -V
 conda 4.8.0
 ```
-In this project, *psycopg2* need to be additionally installed to access PostgresSQL data from python environment.
+
+In this project, *psycopg2* and *ipython-sql* need to be additionally installed to access PostgresSQL data from python environment, and see the table entries in the jupyter notebook.
 The necessary libraries can be installed with the following command.
+
 ```
 $ conda install psycopg2
-Collecting package metadata (current_repodata.json): done
-Solving environment: done
+$ conda install -c conda-forge ipython-sql
+```
 
-## Package Plan ##
+## Running 
 
-  environment location: /home/hk/anaconda3
+### Initialize db
 
-  added / updated specs:
-    - psycopg2
+To 
+```
+$ python create_tables.py
+```
 
+### Feed data into DB
 
-The following packages will be downloaded:
-
-    package                    |            build
-    ---------------------------|-----------------
-    libpq-11.2                 |       h20c2e04_0         2.0 MB
-    psycopg2-2.8.4             |   py37h1ba5d50_0         162 KB
-    ------------------------------------------------------------
-                                           Total:         2.2 MB
-
-The following NEW packages will be INSTALLED:
-
-  libpq              pkgs/main/linux-64::libpq-11.2-h20c2e04_0
-  psycopg2           pkgs/main/linux-64::psycopg2-2.8.4-py37h1ba5d50_0
-
-
-Proceed ([y]/n)? y
-
-
-Downloading and Extracting Packages
-psycopg2-2.8.4       | 162 KB    | ##################################### | 100% 
-libpq-11.2           | 2.0 MB    | ##################################### | 100% 
-Preparing transaction: done
-Verifying transaction: done
-Executing transaction: done
 
 ```
+$ cd python
+$ python etl.py
+```
+
+### While testing
+
+#### 
+
+```
+jupyter notebook etl.ipynb
+```
+
+### You can see the 
+
+'''
+'''

@@ -49,14 +49,21 @@ def process_song_file(cur, filepath):
 
 def process_log_file(cur, filepath):
     """
+    Process log_data files and store them into songplays, users, and timetable in DB.
+    The files includes JSON format data.
 
     Parameters
     ----------
-
+    cur : Cursor class instance (http://initd.org/psycopg/docs/cursor.html)
+        database cursor
+    filepath : string
+        full file path to entry data
 
     Returns
     -------
-
+    Add rows in the table songplays
+    Add rows in the table users
+    Add rows in the table time
     """
     # open log file
     df = pd.read_json(filepath, lines=True, orient='columns')
@@ -101,6 +108,25 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Navigate through song_data / log_data files and call processing functions accordingly
+    to store data in the PostgreSQL database connected by the caller function.
+
+    Parameters
+    ----------
+    cur : Cursor class instance (http://initd.org/psycopg/docs/cursor.html)
+        database cursor
+    conn : Connection class instance
+        databqase connection.
+    filepath : string
+        full file path to entry data
+    func : Python function
+        Function to process files and their contents.
+
+    Returns
+    -------
+    The progress is logged in the console.
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
