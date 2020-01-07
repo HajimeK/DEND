@@ -13,17 +13,22 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 # Fact Table
 # songplays - records in log data associated with song plays i.e. records with page NextSong
 # songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent
+# Review comments:
+# NOT NULL constraints are proper just for the foreign keys; start_time and user_id.
+# The other foreign keys song_id and artist_id can not carry this constraint because a majority of their data have NULL values and should not be eliminated.
+
+# All the other columns do no require the NOT NULL constraint. Please remove them
 songplay_table_create = ("""
     CREATE TABLE IF NOT EXISTS songplays ( \
         songplay_id SERIAL PRIMARY KEY NOT NULL, \
         start_time TIMESTAMP NOT NULL, \
-        user_id VARCHAR NOT NULL, \
+        user_id INT NOT NULL, \
         level VARCHAR, \
-        song_id VARCHAR NOT NULL, \
-        artist_id VARCHAR NOT NULL, \
-        session_id INT NOT NULL, \
-        location VARCHAR NOT NULL, \
-        user_agent VARCHAR NOT NULL \
+        song_id VARCHAR, \
+        artist_id VARCHAR, \
+        session_id INT, \
+        location VARCHAR, \
+        user_agent VARCHAR \
     );
 """)
 
@@ -75,7 +80,7 @@ time_table_create = ("""
         week INT, \
         month INT, \
         year INT, \
-        weekday INT \
+        weekday VARCHAR \
     );
 """)
 
